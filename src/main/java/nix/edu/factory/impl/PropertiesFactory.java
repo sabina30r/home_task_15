@@ -9,9 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-public class PropertiesFactory implements ObjectFactory<AppProperties> {
-
-    private static AppProperties instance;
+public class PropertiesFactory implements ObjectFactory {
     private static PropertiesReader reader;
     private String path;
 
@@ -20,18 +18,19 @@ public class PropertiesFactory implements ObjectFactory<AppProperties> {
         this.path = path;
     }
 
-    @Override
-    public AppProperties getObjectInstance() {
+    public <T> T getObjectInstance(Class<T> type) {
+        T instance = null;
         try {
-            instance = AppProperties.class.getDeclaredConstructor().newInstance();
+            instance = type.getDeclaredConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
-        initFields(path);
+        initFields(path, instance);
+
         return instance;
     }
 
-    private void initFields(String path) {
+    private <T> void initFields(String path, T instance) {
         Map<String, String> map = reader.readProperties(path);
         Field[] declaredFields = AppProperties.class.getDeclaredFields();
         for (Field field : declaredFields) {

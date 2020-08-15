@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         PropertiesReader propertiesReader = new PropertiesReader();
-        AppProperties appProperties = new PropertiesFactory(propertiesReader, propertyFile).getObjectInstance();
+        AppProperties appProperties = new PropertiesFactory(propertiesReader, propertyFile).getObjectInstance(AppProperties.class);
         System.out.println("url  = " + appProperties.url);
         System.out.println("user = " + appProperties.user);
         System.out.println("password = " + appProperties.password);
